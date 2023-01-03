@@ -1,2 +1,2 @@
 # GoalMernApp
-simple mern app to set goa;s
+simple mern app to set goals
