@@ -1,19 +1,15 @@
-const express = require("express");
-// route function to connect controller to routes
-const router = express.Router();
-// get ccontrollers
+const express = require('express')
+const router = express.Router()
 const {
-    getGoals,
-    setGoals,
-    updateGoals,
-    deleteGoals,
-} = require("../controllers/goalController");
-//call in protect route function
-const { protect } = require("../Middleware/authenticationMiddleware");
-// connect router to controllers
-router.get("/", protect, getGoals);
-router.post("/", protect, setGoals);
-router.put("/:id", protect, updateGoals);
-router.delete("/:id", protect, deleteGoals);
+  getGoals,
+  setGoal,
+  updateGoal,
+  deleteGoal,
+} = require('../controllers/goalController')
 
-module.exports = router;
+const { protect } = require('../middleware/authMiddleware')
+
+router.route('/').get(protect, getGoals).post(protect, setGoal)
+router.route('/:id').delete(protect, deleteGoal).put(protect, updateGoal)
+
+module.exports = router

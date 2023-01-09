@@ -1,6 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+// call in register fuction  and rest reduer
+import { register, reset } from "../features/auth/authSlice";
+import Spinner from "../components/Spinner";
 import { FaUser } from "react-icons/fa";
+
 function Register() {
     const [formData, setFormData] = useState({
         name: "",
@@ -11,13 +19,45 @@ function Register() {
 
     const { name, email, password, confirmPassword } = formData;
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const { user, isLoading, isError, isSuccess, message } = useSelector(
+        (state) => state.auth
+    );
+
+    useEffect(() => {
+        if (isError) {
+            toast.error(message);
+        }
+        if (isSuccess || user) {
+            navigate("/");
+        }
+        dispatch(reset());
+    }, [user, isError, isSuccess, message, navigate, dispatch]);
+
     const onChange = (e) => {
         setFormData((prev) => ({
             ...prev,
             [e.target.name]: e.target.value,
         }));
     };
-    const onSubmit = () => {};
+    const onSubmit = (e) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            toast.error("passwords dont match");
+        } else {
+            const userData = {
+                name,
+                email,
+                password,
+            };
+            dispatch(register(userData));
+        }
+    };
+    if (isLoading) {
+        return <Spinner />;
+    }
     return (
         <>
             <section className="heading">
@@ -25,7 +65,7 @@ function Register() {
                     <FaUser />
                     Register
                 </h1>
-                <p>Create an account</p>
+                <p>Create an Account</p>
             </section>
             <section className="form">
                 <form onSubmit={onSubmit}>
