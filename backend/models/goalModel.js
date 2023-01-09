@@ -1,20 +1,22 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const goalSchema = mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'User',
+    {
+        // associating user to goal
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            // add a reference modal the object id associates with
+            ref: "User",
+        },
+        text: {
+            type: String,
+            required: [true, "Please add a text value"],
+        },
     },
-    text: {
-      type: String,
-      required: [true, 'Please add a text value'],
-    },
-  },
-  {
-    timestamps: true,
-  }
-)
+    {
+        timestamps: true,
+    }
+);
 
-module.exports = mongoose.model('Goal', goalSchema)
+module.exports = mongoose.model("Goal", goalSchema);
